@@ -5,7 +5,7 @@
 * 开发环境：VC++6.0 / Dev-C++ / VS 均可运行
 **************************************************/
 
-#include "card_data.h"
+#include"card_data.h"
 #include"file_io.h"
 #include"utils.h"
 #include"ui.h"
