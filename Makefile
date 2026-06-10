@@ -1,30 +1,47 @@
-# 编译器（Windows下如果用MinGW，用gcc；Linux/macOS默认就是gcc）
+# 编译器
 CC = gcc
-# 编译选项：指定头文件目录、开启警告、添加调试信息
+# 头文件搜索目录 + 警告 + 调试 + Windows UTF8编码修复参数
 CFLAGS = -I./include -Wall -g
-# 目标可执行文件名（Windows自动生成.exe，Linux/macOS生成无后缀文件）
+# Windows MinGW 追加控制台UTF8编译宏，解决运行中文乱码
 ifeq ($(OS),Windows_NT)
+    CFLAGS += -D_WIN_CONSOLE_UTF8
     TARGET = campuscard.exe
 else
     TARGET = campuscard
 endif
-# 所有源文件（自动找到src目录下的所有.c文件，不用手动列）
-SRCS = $(wildcard ./src/*.c)
 
-# 默认目标：执行make就会编译
+# 源文件、目标文件自动匹配
+SRCS = $(wildcard ./src/*.c)
+OBJS = $(patsubst ./src/%.c, ./obj/%.o, $(SRCS))
+
+# 主生成目标
 all: $(TARGET)
 
-# 编译规则：所有源文件编译成目标程序
-$(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
+# 链接：所有.o合成可执行程序
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
-# 清理规则：执行make clean删除编译产物
-clean:
+# 编译规则：src/*.c 生成 obj/*.o，自动创建obj文件夹
+./obj/%.o: ./src/%.c | obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# 自动创建obj存放中间文件
+obj:
 ifeq ($(OS),Windows_NT)
-	del /f $(TARGET) *.o 2>nul || exit 0
+	mkdir obj 2>nul
 else
-	rm -f $(TARGET) *.o
+	mkdir -p obj
 endif
 
-# 声明伪目标（避免和文件名冲突）
+# 清理编译产物
+clean:
+ifeq ($(OS),Windows_NT)
+	rmdir /s /q obj 2>nul
+	del /f $(TARGET) 2>nul
+else
+	rm -rf obj
+	rm -f $(TARGET)
+endif
+
+# 伪目标，防止和文件重名冲突
 .PHONY: all clean
