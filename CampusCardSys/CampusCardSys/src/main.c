@@ -5,7 +5,7 @@
  *   cl /nologo /W4 /I. /Ithirdparty src\*.c thirdparty\mongoose.c /Fe:CampusCardSys.exe
  *
  * 编译方法 (GCC/MinGW):
- *   gcc -Wall -Wextra -I. -Ithirdparty src/*.c thirdparty/mongoose.c -o CampusCardSys.exe -lws2_32
+ *   gcc -Wall -Wextra -I. -Ithirdparty src/ *.c thirdparty/mongoose.c -o CampusCardSys.exe -lws2_32
  */
 #include "include/server.h"
 #include "include/login.h"
