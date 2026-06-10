@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 校园卡管理系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="login-container">
+    <div class="login-card">
+        <h1>🎓 校园卡系统</h1>
+        <p class="subtitle">Campus Card Management System</p>
+
+        <div class="role-tabs">
+            <button class="role-tab active" data-role="0">👨‍💼 管理员</button>
+            <button class="role-tab" data-role="1">🎓 学 生</button>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label id="accountLabel">管理员账号</label>
+                <input type="text" id="account" placeholder="请输入账号" required>
+            </div>
+            <div class="form-group">
+                <label>密 码</label>
+                <input type="password" id="password" placeholder="请输入密码" required>
+            </div>
+            <button type="submit" class="btn-login" id="loginBtn">登 录</button>
+        </form>
+        <p style="text-align:center;margin-top:16px;color:var(--gray-500);font-size:12px;">
+            默认管理员: admin / admin123 &nbsp;|&nbsp; 学生默认密码: 123456
+        </p>
+    </div>
+</div>
+
+<script src="api.js"></script>
+<script>
+(function() {
+    var currentRole = 0;
+
+    /* 角色切换 */
+    document.querySelectorAll('.role-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.role-tab').forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            currentRole = parseInt(this.dataset.role);
+            document.getElementById('accountLabel').textContent = currentRole === 0 ? '管理员账号' : '学 号';
+            document.getElementById('account').placeholder = currentRole === 0 ? '请输入管理员账号' : '请输入学号';
+        });
+    });
+
+    /* 登录提交 */
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('loginBtn');
+        var account = document.getElementById('account').value.trim();
+        var password = document.getElementById('password').value.trim();
+
+        if (!account || !password) {
+            showToast('请填写完整信息', 'error');
+            return;
+        }
+
+        btn.textContent = '登录中...';
+        btn.disabled = true;
+
+        var result = await apiLogin(account, password, currentRole);
+
+        if (result.code === 200) {
+            showToast('登录成功！', 'success');
+            setTimeout(function() {
+                if (currentRole === 0) {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'student.html';
+                }
+            }, 500);
+        } else {
+            showToast(result.msg || '登录失败', 'error');
+            btn.textContent = '登 录';
+            btn.disabled = false;
+        }
+    });
+})();
+</script>
+</body>
+</html>

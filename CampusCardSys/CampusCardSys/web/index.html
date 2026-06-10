@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园卡管理系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>
+(function() {
+    var token = localStorage.getItem('token');
+    var role = parseInt(localStorage.getItem('role') || '-1');
+    if (token && role === 0) {
+        window.location.href = 'admin.html';
+    } else if (token && role === 1) {
+        window.location.href = 'student.html';
+    } else {
+        window.location.href = 'login.html';
+    }
+})();
+</script>
+</body>
+</html>
