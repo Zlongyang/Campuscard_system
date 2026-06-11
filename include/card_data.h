@@ -16,10 +16,12 @@
 #define MAX_ADDR_LEN    10      // 上机地点最大长度
 #define LOGIN_TIMES     3       // 登录最大错误次数（3次错误冻结账户）
 #define ADMIN_PWD       "admin" // 管理员默认密码
-// 常量定义
-#define STU_CARD_FILE   "student_card.txt"   // 学生校园卡数据文件
-#define RECORD_FILE     "B17010101.txt"      // 学生上机记录文件
+//业务数据常量
 #define PER_MIN_FEE     0.15                 // 上机单价：0.15元/分钟
+
+// 目前将学生校园卡数据文件和上机记录文件路径定义为常量，后续可根据需要修改为配置文件读取
+#define STU_CARD_FILE   "data\\B25010101\\student_card.txt"   // 学生校园卡数据文件
+#define RECORD_FILE     "data\\B25010101\\record.txt"      // 学生上机记录文件
 
 
 // 校园卡状态枚举（对应state字段，增强代码可读性）
