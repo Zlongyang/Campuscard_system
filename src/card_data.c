@@ -6,5 +6,10 @@
 #include "card_data.h"
 
 /************************ 全局变量定义 ************************/
-Card g_stuCard;                 // 全局变量：当前登录学生的校园卡信息
-int g_loginErrorCnt = 0;        // 全局变量：学生登录错误次数，初始为0
+Card g_stuCard;                                       // 全局变量：当前登录学生的校园卡信息
+Record g_stuRecord;                                   // 全局变量：当前登录学生的上机记录信息
+char g_student_card_file[MAX_ID_LEN + 30] = {0};      // 全局变量：当前登录学生的校园卡数据文件路径（由ResolveStudentPaths动态生成）
+char g_record_file[MAX_ID_LEN + 20] = {0};            // 全局变量：当前登录学生的上机记录文件路径（由ResolveStudentPaths动态生成）
+int g_loginErrorCnt = 0;                              // 全局变量：学生登录错误次数，初始为0
+struct tm g_startTime;                                // 全局变量：上机时系统时间结构体，供上机记录使用
+struct tm g_endTime;                                  // 全局变量：下机时系统时间结构体，供上机记录使用

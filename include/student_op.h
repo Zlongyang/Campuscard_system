@@ -19,4 +19,10 @@ void QueryStuInfo(const char *recordFile, const Card *card);
  * @param perMinFee 每分钟上机费用
  */
 void StatStuRecord(const char *recordFile, double perMinFee);
+
+/**
+ * @brief 列出个人全部上机记录
+ * @param recordFile 学生上机记录文件
+ */
+void ListAllRecords(const char *recordFile);
 #endif

@@ -10,12 +10,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <windows.h>
+#include <time.h>
 
 /************************ 宏定义 ************************/
 #define MAX_ID_LEN      10      // 卡号、学号、姓名最大长度
 #define MAX_ADDR_LEN    10      // 上机地点最大长度
 #define LOGIN_TIMES     3       // 登录最大错误次数（3次错误冻结账户）
 #define ADMIN_PWD       "admin" // 管理员默认密码
+#define TOTAL_RECORDS_FILE "data\\total_records.txt" // 全局上机记录文件路径
 //业务数据常量
 #define PER_MIN_FEE     0.15                 // 上机单价：0.15元/分钟
 
@@ -59,24 +62,30 @@ typedef struct card
  * @brief 上机记录结构体（每个学生单独文本文件存储）
  * @param ID 卡号
  * @param date 上机日期（格式示例：20260610）
- * @param start_time 上机开始时间（格式示例：2200）
+ * @param start_time 上机开始时间（格式示例：08:30）
  * @param duration 上机时长(分钟)
  * @param online_state 上机状态：0未上机/1上机中
  * @param address 上机地点（机房编号）
+ * @param fee 单次上机费用（元）
  */
 typedef struct record
 {
     char ID[MAX_ID_LEN];        // 卡号
-    char date[9];               // 上机日期 格式YYYYMMDD
+    char date[11];              // 上机日期 格式YYYYMMDD
     char start_time[7];         // 开始时间 格式HH:MM
     int duration;               // 上机用时(分钟)
     char online_state;          // 上机状态 0-未上机 1-上机中
     char address[MAX_ADDR_LEN]; // 上机地点
+    double fee;                 // 单次上机费用
 } Record;
 
 /************************ 全局变量声明 ************************/
 extern Card g_stuCard;          // 当前登录学生的校园卡信息
+extern Record g_stuRecord;      // 当前登录学生的上机记录信息
+extern char g_student_card_file[MAX_ID_LEN + 30];    // 当前登录学生的校园卡数据文件路径
+extern char g_record_file[MAX_ID_LEN + 20];          // 当前登录学生的上
 extern int g_loginErrorCnt;     // 学生登录错误次数
-
+extern struct tm g_startTime;   // 上机时系统时间结构体，供上机记录使用
+extern struct tm g_endTime;     // 下机时系统时间结构体，供上机记录使用
 
 #endif // CARD_DATA_H

@@ -2,9 +2,9 @@
 CC = gcc
 # 头文件搜索目录 + 警告 + 调试 + Windows UTF8编码修复参数
 CFLAGS = -I./include -Wall -g
-# Windows MinGW 追加控制台UTF8编译宏，解决运行中文乱码
+# Windows MinGW 将UTF-8源文件转为GBK编码输出，匹配中文控制台
 ifeq ($(OS),Windows_NT)
-    CFLAGS += -D_WIN_CONSOLE_UTF8
+    CFLAGS += -fexec-charset=GBK
     TARGET = campuscard.exe
 else
     TARGET = campuscard
